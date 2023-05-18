@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { Button, Icon, Table, Flag, Ref } from 'semantic-ui-react'
+import { Button, Icon, Table,  Ref } from 'semantic-ui-react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 class StarredProjectsList extends Component {
-
   constructor(props){
     super(props)
     this.state = {
@@ -131,8 +130,6 @@ class StarredProjectsList extends Component {
 
 
   render(){
-    const { reOrder,  } = this;
-    const {  selectedRowIds } = this.state;
     return(
     <div style={{padding: "30px" }}>
       <DragDropContext onDragEnd={this.onDragEnd}>
@@ -146,7 +143,7 @@ class StarredProjectsList extends Component {
               <Table.HeaderCell>address</Table.HeaderCell>
               <Table.HeaderCell>phone_number</Table.HeaderCell>
               <Table.HeaderCell>firms</Table.HeaderCell>
-              <Table.HeaderCell>Action</Table.HeaderCell>
+              <Table.HeaderCell>Availables</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Droppable droppableId="table">
@@ -154,7 +151,7 @@ class StarredProjectsList extends Component {
               <Ref innerRef={provided.innerRef}>
                 <Table.Body {...provided.droppableProps}>
                   {this.state.starredProjects.map((project, idx) => {
-                    let availableTime = new Date().toLocaleDateString()  < project["available_time"]
+                    let availableTime =  project["available_time"]
                     return (
                       <Draggable
                         draggableId={project.id.toString()}
@@ -199,7 +196,7 @@ class StarredProjectsList extends Component {
                             </Table.Cell>
                             <Table.Cell id="remove-donate-div">
                                 
-                              <Button color={availableTime ? 'green' : 'red'} onClick={()=>{this.props.setOpen(true)}} icon>
+                              <Button color={availableTime ? 'green' : 'red'} onClick={()=>{}} icon>
                                 <Icon name='calendar alternate outline' />
                               </Button>
                             </Table.Cell>

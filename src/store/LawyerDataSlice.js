@@ -8,7 +8,7 @@ export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
 
 const initialState = { data: [], loading: false, error: "" };
 
-const layeraData = createSlice({
+const lawyeraData = createSlice({
   name: "layersData",
   initialState,
   reducers: {}, // Add any additional reducers if needed
@@ -28,8 +28,5 @@ const layeraData = createSlice({
       });
   },
 });
-export const allUserData = (state) =>{
-    // console.log(state,"state")
-    
-    return state.layersReducer.data}
-export default layeraData.reducer;
+export const allUserData = (state) =>{ return state.lawyersReducer.data}
+export default lawyeraData.reducer;

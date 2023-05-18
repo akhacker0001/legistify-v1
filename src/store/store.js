@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { Reducer } from "@reduxjs/toolkit";
-import layersReducer from "./LayerDataSlice";
+import lawyersReducer from "./LawyerDataSlice";
+import BookingReducer from "./bookSlicer"
 
 const reducer = {
-  layersReducer: layersReducer,
+  lawyersReducer: lawyersReducer,
+  BookingReducer:BookingReducer
 };
 
 export const store = configureStore({ reducer: reducer });

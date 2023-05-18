@@ -1,17 +1,15 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
-import { allUserData } from "../store/LayerDataSlice";
+import { allUserData } from "../../store/LawyerDataSlice";
 import Table from "./Table"
 import SearchBar from "./SearchBar";
 import { Container } from "semantic-ui-react";
-import AppointmentModal from "./modal";
 
 export default function LawyersTable() {
   const data = useSelector(allUserData);
   const [layersDetails, setLayersDetails] = React.useState([]);
   const [userDetails, setUserDetails] = React.useState([]);
   const [inputText,setInputText] = React.useState("")
-  const [openModal, setOpenModal] = React.useState(false)
 
 
 
@@ -19,9 +17,8 @@ export default function LawyersTable() {
     setLayersDetails(data);
     setUserDetails(data);
   }, [data]);
-  
-  React.useEffect(()=>{
-    // name, speciality, or firms
+
+  const handleFilterLayersData = () => { // here I'm filterning the data with their name | speciality | firms
     let tempLayersData = [...userDetails]
     tempLayersData = tempLayersData.filter((ele)=>{
       if(ele['name'].toLowerCase().includes(inputText.toLowerCase()) || ele['speciality'].toLowerCase().includes(inputText.toLowerCase()) || ele['firms'].toLowerCase().includes(inputText.toLowerCase())){
@@ -31,6 +28,14 @@ export default function LawyersTable() {
       }
     })
     setLayersDetails(tempLayersData)
+  }
+  
+  React.useEffect(()=>{
+    if(!inputText.length){
+      setLayersDetails(data)
+    }else{
+      handleFilterLayersData()
+    }
   },[inputText])
 
   const handleCollectData = (event,data) => {
@@ -41,8 +46,7 @@ export default function LawyersTable() {
     <>
     <Container>
     <SearchBar inputText={inputText} handleCollectData={handleCollectData} />
-     <Table projectArray={layersDetails}  setOpen={setOpenModal}/>
-     <AppointmentModal open={openModal}  setOpen={setOpenModal} />
+     <Table projectArray={layersDetails}  />
     </Container>
     </>
   );
