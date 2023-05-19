@@ -1,9 +1,9 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { allUserData } from "../../store/LawyerDataSlice";
-import Table from "./Table"
 import SearchBar from "./SearchBar";
 import { Container } from "semantic-ui-react";
+import LawyerTableList from "./Tables";
 
 export default function LawyersTable() {
   const data = useSelector(allUserData);
@@ -36,7 +36,7 @@ export default function LawyersTable() {
     }else{
       handleFilterLayersData()
     }
-  },[inputText])
+  },[])
 
   const handleCollectData = (event,data) => {
     setInputText(data.value)
@@ -46,7 +46,8 @@ export default function LawyersTable() {
     <>
     <Container>
     <SearchBar inputText={inputText} handleCollectData={handleCollectData} />
-     <Table projectArray={layersDetails}  />
+     {/* <Table projectArray={layersDetails}  /> */}
+     <LawyerTableList projectArray={layersDetails}/>
     </Container>
     </>
   );

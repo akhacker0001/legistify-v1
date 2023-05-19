@@ -68,7 +68,7 @@ function Main() {
             Legistify
           </Typography>
           <Button
-            sx={{ color: "white" }}
+            sx={{ color: "white",background:"green" }}
             variant="contained"
             onClick={() => {
               if (currentInterFace === interFaces.DASHBOARD) {
@@ -78,7 +78,7 @@ function Main() {
               }
             }}
           >
-            Book An Appointment
+          { currentInterFace === interFaces.DASHBOARD ? 'Book An Appointment' : 'Back To Bashboard'}
           </Button>
         </Toolbar>
       </AppBar>

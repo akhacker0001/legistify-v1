@@ -1,88 +1,49 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect, useState } from 'react'
 import { Button, Icon, Table,  Ref } from 'semantic-ui-react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
-class StarredProjectsList extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      starredProjects: props.projectArray,
-      reorderEnabled: true,
-      selectedRowIds: [],
-      draggingRowId: null
-    }
-    this.onDragEnd = this.onDragEnd.bind(this);
-  }
-
-  componentDidMount () {
-    this.setState({
-        starredProjects:this.props.projectArray
+const  LawyerTableList  = ({projectArray}) => {
+    const [tableListState,setTableListState] = useState({
+        starredProjects: projectArray,
+        reorderEnabled: true,
+        selectedRowIds: [],
+        draggingRowId: null
     })
-    window.addEventListener('click', this.onWindowClick);
-    window.addEventListener('keydown', this.onWindowKeyDown);
-    window.addEventListener('touchend', this.onWindowTouchEnd);
-  }
 
-  componentDidUpdate(prevProp,prevState){
-    if(prevProp.projectArray !==this.props.projectArray){
-        this.setState({
-            starredProjects:this.props.projectArray
-        })
+    useEffect(()=>{
+        setTableListState((state)=>({
+            ...state,
+            starredProjects:projectArray
+        }))
+    window.addEventListener('click', onWindowClick);
+    window.addEventListener('keydown', onWindowKeyDown);
+    window.addEventListener('touchend', onWindowTouchEnd);
+    return ()=>{
+        window.removeEventListener('click', onWindowClick);
+        window.removeEventListener('keydown', onWindowKeyDown);
+        window.removeEventListener('touchend', onWindowTouchEnd);
     }
-  }
+    },[projectArray])
 
-  componentWillUnmount () {
-    window.removeEventListener('click', this.onWindowClick);
-    window.removeEventListener('click', this.onWindowClick);
-    window.removeEventListener('click', this.onWindowClick);
-  }
-
-  getItemStyle = (isDragging, draggableStyle) => ({
+ const  getItemStyle = (isDragging, draggableStyle) => ({
     background: isDragging && ("lightblue"),
     ...draggableStyle,
   })
 
-  reOrder = () => {
-    const { reorderEnabled } = this.state
-
-    this.setState({
-      reorderEnabled: !reorderEnabled
-    })
-  }
 
 
-  onDragStart = start => {
-    const id = start.draggableId;
-    const selected = this.state.selectedRowIds.find(selectedId => selectedId === id);
 
-    // If dragging an item that is not selected, unselect all items
-    if (!selected) {
-      this.unselectAll();
-    }
 
-    this.setState({
-      draggingRowId: start.draggableId,
-    });
-  }
-
-  unselect = () => {
-    this.unselectAll();
-  }
-
-  unselectAll = () => {
-    this.setState({
-      selectedRowIds: [],
-    });
-  }
-
-  onDragEnd = result => {
+  const onDragEnd = result => {
     const { destination, source, reason } = result;
 
     // Not a thing to do...
     if (!destination || reason === 'CANCEL') {
-      this.setState({
-        draggingRowId: null,
-      });
+        setTableListState((state)=>({
+            ...state,
+            draggingRowId: null
+
+        }))
       return;
     }
 
@@ -93,46 +54,50 @@ class StarredProjectsList extends Component {
       return;
     }
 
-    const starredProjects = Object.assign([], this.state.starredProjects);
-    const project = this.state.starredProjects[source.index];
+    const starredProjects = Object.assign([], tableListState.starredProjects);
+    const project = tableListState.starredProjects[source.index];
     starredProjects.splice(source.index, 1);
     starredProjects.splice(destination.index, 0, project);
-    this.setState({
-      starredProjects
-    });
+    setTableListState((state)=>({
+        ...state,
+        starredProjects
+    }))
+  }
+  const unselectAll = () => {
+    setTableListState((state)=>({
+        ...state,
+        selectedRowIds: [],
+
+    }))
   }
 
-  onWindowKeyDown = event => {
+  const onWindowKeyDown = event => {
     if (event.defaultPrevented) {
-      this.unselectAll();
+      unselectAll();
     }
 
     if (event.key === `Escape`) {
-      this.unselectAll();
+      unselectAll();
     }
   }
 
-  onWindowClick = event => {
+  const onWindowClick = event => {
     if (event.defaultPrevented) {
       return;
     }
-    this.unselectAll();
+    unselectAll();
   }
 
-  onWindowTouchEnd = event => {
+  const onWindowTouchEnd = event => {
     if (event.defaultPrevented) {
       return;
     }
-    this.unselectAll();
+    unselectAll();
   }
 
-
-
-
-  render(){
     return(
     <div style={{padding: "30px" }}>
-      <DragDropContext onDragEnd={this.onDragEnd}>
+      <DragDropContext onDragEnd={onDragEnd}>
         <Table singleLine>
           <Table.Header>
             <Table.Row>
@@ -150,7 +115,7 @@ class StarredProjectsList extends Component {
             {(provided, snapshot) => (
               <Ref innerRef={provided.innerRef}>
                 <Table.Body {...provided.droppableProps}>
-                  {this.state.starredProjects.map((project, idx) => {
+                  {tableListState.starredProjects.map((project, idx) => {
                     let availableTime =  project["available_time"]
                     return (
                       <Draggable
@@ -163,7 +128,7 @@ class StarredProjectsList extends Component {
                           <Table.Row
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            style={this.getItemStyle(
+                            style={getItemStyle(
                               snapshot.isDragging,
                               provided.draggableProps.style
                             )}
@@ -214,7 +179,6 @@ class StarredProjectsList extends Component {
       </DragDropContext>
     </div>
     )
-  }
 }
 
-export default StarredProjectsList
+export default LawyerTableList
