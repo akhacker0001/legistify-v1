@@ -1,3 +1,6 @@
-start the application 
+# start the application 
+firstly need to install the packages type npm install
 
-just run commad npm un start
+and then 
+
+# run command npm run start
