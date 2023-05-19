@@ -12,21 +12,42 @@ import { fetchUsers } from "../store/LawyerDataSlice";
 import { useState } from "react";
 import { interFaces } from "../utils";
 import AppointmentDashboard from "./appointment/AppointmentDashboard";
+import MessageContainer from "./messageContainer/Message";
 
 function Main() {
   let dispatch = useDispatch();
-  const [currentInterFace,setCurrentInterFace] = useState(interFaces.DASHBOARD)
+  const [currentInterFace, setCurrentInterFace] = useState(
+    interFaces.DASHBOARD
+  );
+  const [messageState, setMessageState] = useState({
+    openMessage: false,
+    message: "",
+  });
+
+  const handleSetMessage = (message) => {
+    setMessageState({
+      openMessage: true,
+      message: message,
+    });
+
+    setTimeout(() => {
+      setMessageState({
+        openMessage: false,
+        message: "",
+      });
+    }, 3000);
+  };
 
   React.useEffect(() => {
     dispatch(fetchUsers());
   }, []);
 
   const component = {
-    DASHBOARD:LawyersTable,
-    APPOINTMENT:AppointmentDashboard
-  }
+    DASHBOARD: LawyersTable,
+    APPOINTMENT: AppointmentDashboard,
+  };
 
-  let Component = component[currentInterFace]
+  let Component = component[currentInterFace];
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -46,21 +67,27 @@ function Main() {
           >
             Legistify
           </Typography>
-          <Button sx={{color:"white"}} variant="contained" onClick={()=>{
-            if(currentInterFace===interFaces.DASHBOARD){
-              setCurrentInterFace(interFaces.APPOINTMENT)
-            }else{
-              setCurrentInterFace(interFaces.DASHBOARD)
-            }
-
-          }} >Book An Appointment</Button>
+          <Button
+            sx={{ color: "white" }}
+            variant="contained"
+            onClick={() => {
+              if (currentInterFace === interFaces.DASHBOARD) {
+                setCurrentInterFace(interFaces.APPOINTMENT);
+              } else {
+                setCurrentInterFace(interFaces.DASHBOARD);
+              }
+            }}
+          >
+            Book An Appointment
+          </Button>
         </Toolbar>
       </AppBar>
       <Box component="nav"></Box>
       <Box component="main" sx={{ p: 3, width: "100%" }}>
         <Toolbar />
         <Box sx={{ width: "100%" }}>
-        { Component &&<Component />}
+          {Component && <Component handleSetMessage={handleSetMessage} />}
+          <MessageContainer {...messageState} />
         </Box>
       </Box>
     </Box>

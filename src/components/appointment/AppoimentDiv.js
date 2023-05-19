@@ -61,6 +61,7 @@ const AppoimentDiv = ({
               withPortal
               name="datepicker"
               selected={appointmentDetails.date}
+              minDate={new Date()}
               onChange={(data)=>{
                 let obj = {
                   target:{

@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import {  Table, Container, Button } from "semantic-ui-react";
-import uniqid from 'uniqid';
 
 const AppointmentTable = () => {
   let bookingDetails = useSelector(
@@ -24,7 +23,7 @@ const AppointmentTable = () => {
               return (
                 <>
                   <Table.Row>
-                    <Table.Cell>{uniqid('$5^7#5(5^2')}</Table.Cell>
+                    <Table.Cell>{ele.bookingId}</Table.Cell>
                     <Table.Cell>{ele.lawyerName}</Table.Cell>
                     <Table.Cell>
                       {new Date(ele.date).toLocaleDateString()}
